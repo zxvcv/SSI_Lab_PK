@@ -1,17 +1,36 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import {render} from 'react-dom';
+import TablicaKanban from './TablicaKanban';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+let listaKart = [
+    {   id: 1,
+        tytul: "Przeczytać książkę",
+        opis: "Muszę przeczytać całą książkę",
+        status: "in-progress",
+        zadania: []
+    },
+    {   id: 2,
+        tytul: "Napisać trochę kodu",
+        opis: "Będę przepisywać kod przykładu z laboratorium",
+        status: "todo",
+        zadania: [
+            {
+                id: 1,
+                nazwa: "Przykład listy zakupów",
+                zrobione: true
+            },
+            {
+                id: 2,
+                nazwa: "Przykład Kanban",
+                zrobione: false
+            },
+            {
+                id: 3,
+                nazwa: "Mój własny przykład",
+                zrobione: false
+            }
+        ]
+    }
+];
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+render(<TablicaKanban karty={listaKart}/>, document.getElementById('root'));

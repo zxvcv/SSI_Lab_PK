@@ -58,6 +58,20 @@ class Karta extends Component{
                      onClick={this.zmienSzczegoly.bind(this)}>
                     {this.props.tytul}
                 </div>
+                <div>
+                    <input type="button"
+                           value="Left"
+                           className="checklist__add-task"
+                           onClick={this.props.funkcjePozycjiKarty.lewo.bind(null, this.props.id)}/>
+                    <input type="button"
+                           value="Right"
+                           className="checklist__add-task"
+                           onClick={this.props.funkcjePozycjiKarty.prawo.bind(null, this.props.id)}/>
+                    <input type="button"
+                           value="Delete"
+                           className="checklist__add-task"
+                           onClick={this.props.funkcjePozycjiKarty.usun.bind(null, this.props.id)}/>
+                </div>
                 {szczegolyKarty}
             </div>
         )
@@ -70,6 +84,7 @@ Karta.propTypes = {
     opis: PropTypes.string,
     kolor: PropTypes.string,
     zadania: PropTypes.arrayOf(PropTypes.object),
-    funkcjeZwrotne: PropTypes.object
+    funkcjeZwrotne: PropTypes.object,
+    funkcjePozycjiKarty: PropTypes.object
 }
 export default Karta;

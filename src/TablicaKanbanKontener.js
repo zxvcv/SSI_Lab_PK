@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
 import update from 'immutability-helper';
 import TablicaKanban from "./TablicaKanban";
-import {writeFile} from "fs";
-
 
 
 class TablicaKanbanKontener extends Component{
     constructor() {
         super();
         this.state = {
-            karty: []
+            lista: []
         };
     }
 
@@ -17,210 +15,161 @@ class TablicaKanbanKontener extends Component{
         fetch('./karty.json')
             .then((response) => response.json())
             .then((responseData) => {
-                this.setState({karty: responseData});
+                this.setState({lista: responseData});
             })
             .catch((error) => {
                 console.log('Błąd pobierania i przetwarzania danych.', error);
             })
     }
 
-    pobierzKolor(status){
-        if(status === "todo")
-            return "#3A7A2A";
-        if(status === "in-progress")
-            return "#BD8D3D";
-        if(status === "done")
-            return "#FF8D3D";
-    }
+    zwiekszProdukt(idProduktu){
+        console.log(`zwieksz produkt: ${idProduktu}`);
 
-    moveLeft(idKarty){
-        console.log(`moveLeft`);
+        //znajdujemy indeks produktu
+        let indexProduktu = this.state.lista.findIndex((produkt) =>produkt.id === idProduktu);
 
-        //let poprzedniStan = this.state.karty;
-
-        //znajdujemy indeks karty
-        let indexKarty = this.state.karty.findIndex((karta) =>karta.id === idKarty);
-
-        let nowyStatus = this.state.karty[indexKarty].status;
-        if(this.state.karty[indexKarty].status === "in-progress")
-            nowyStatus = "todo";
-        if(this.state.karty[indexKarty].status === "done")
-            nowyStatus = "in-progress";
-
-        let nowyStan = update(this.state.karty, {
-            [indexKarty]: {
-                status: {$set: nowyStatus},
-                kolor: {$set: this.pobierzKolor(nowyStatus)}
-            }
-        });
-
-        this.setState({karty: nowyStan});
-    }
-
-    moveRight(idKarty){
-        console.log(`moveRight`);
-
-        //let poprzedniStan = this.state.karty;
-
-        //znajdujemy indeks karty
-        let indexKarty = this.state.karty.findIndex((karta) =>karta.id === idKarty);
-
-        let nowyStatus = this.state.karty[indexKarty].status;
-        if(this.state.karty[indexKarty].status === "in-progress")
-            nowyStatus = "done";
-        if(this.state.karty[indexKarty].status === "todo")
-            nowyStatus = "in-progress";
-
-        let nowyStan = update(this.state.karty, {
-            [indexKarty]: {
-                status: {$set: nowyStatus},
-                kolor: {$set: this.pobierzKolor(nowyStatus)}
-            }
-        });
-
-        this.setState({karty: nowyStan});
-    }
-
-    usunKarte(idKarty){
-        console.log(`deleteKard`);
-
-        //let poprzedniStan = this.state.karty;
-
-        //znajdujemy indeks karty
-        let indexKarty = this.state.karty.findIndex((karta) =>karta.id === idKarty);
-
-
-        let nowyStan = update(this.state.karty, { $splice: [[indexKarty, 1]] });
-
-        this.setState({karty: nowyStan});
-    }
-
-    dodajZadanie(idKarty, nazwaZadania){
-        console.log(`dodajZmiane: ${idKarty}, nazwaZadania: ${nazwaZadania}`);
-
-        //let poprzedniStan = this.state.karty;
-
-        //znajdujemy indeks karty
-        let indexKarty = this.state.karty.findIndex((karta) =>karta.id === idKarty);
-
-        //tworzymy nowe zadanie z podaną nazwą i tymczasowym identyfikatorem
-        let noweZadanie = {id: Date.now(), nazwa: nazwaZadania, zrobione: false};
-
-        //tworzymy nowy obiekt i dodajemy zadanie do tablicy zadań
-        let nowyStan = update(this.state.karty, {
-            [indexKarty]: {
-                zadania: {$push: [noweZadanie]}
-            }
-        });
-
-        //ustawiamy stan komponentu na zmieniony obiekt
-        this.setState({karty: nowyStan});
-
-        //ewentualnie wywołujemy API, aby dodać zadanie na serwer i otrzymać ostateczny identyfikator zadania
-    }
-
-    usunZadanie(idKarty, idZadania, indexZadania){
-        console.log(`idKarty: ${idKarty}, idZadania: ${idZadania}, indexZadania ${indexZadania}`);
-
-        //let poprzedniStan = this.state.karty;
-
-        //znajdujemy indeks karty
-        let indexKarty = this.state.karty.findIndex((karta) =>karta.id === idKarty);
-
-        //Tworzymy nowy obiekt stanu bez wybranego zadania
-        let nowyStan = update(this.state.karty, {
-            [indexKarty]: {
-                zadania: {$splice: [[indexZadania, 1]]}
-            }
-        })
-
-        this.setState({karty: nowyStan});
-    }
-
-    zmienZadanie(idKarty, idZadania, indexZadania){
-        console.log(`zmienZadanie: ${idKarty}, idZadania: ${idZadania}, indexZadania ${indexZadania}`);
-
-        let poprzedniStan = this.state.karty;
-
-        //znajdujemy indeks kartki
-        let indexKarty = this.state.karty.findIndex((karta) => karta.id === idKarty);
-
-        //Tworzymy zmienną będącą referncją do wartośći 'zrobione' zadania
-        let nowaWartoscZrobione;
-
-        //Za pomocą polecenia $apply zmieniamy wartość zrobione na przeciwną
-        let nowyStan = update(this.state.karty, {
-            [indexKarty]: {
-                zadania: {
-                    [indexZadania]: {
-                        zrobione: {
-                            $apply: (zrobione) => {
-                                nowaWartoscZrobione = !zrobione
-                                return nowaWartoscZrobione;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        //ustawiamy stan kompunentu na zmieniony obiekt
-        this.setState({karty: nowyStan});
-
-        //ewentualnie wywołujemy API aby zaktualilzować zadanie na serwerze, np.
-        /*
-        fetch(`${API_URL}/karty/${idKarty}/zadania/${idZadania}`, {
-            method: 'put',
-            headers: API_HEADERS,
-            body: JSON.stringify({zrobione:nowaWartoscZrobione})
-        })
-        */
-    }
-
-    dodajKarte(nowy_tytul, nowy_opis, nowy_status){
-        console.log(`dodajKarte: ${nowy_tytul}, ${nowy_opis}, ${nowy_status}`);
-
-        //let poprzedniStan = this.state.karty;
-
-        if(nowy_opis === '' || nowy_tytul === '') {
-            console.log(`opis i/lub tytul nie moze byc pusty`);
-            return
+        let nowaIlosc = this.state.lista[indexProduktu].ilosc
+        if(nowaIlosc >= 255){
+            nowaIlosc = 255
+        }else{
+            nowaIlosc += 1;
         }
 
-        let iloscKart = this.state.karty.length;
+        let nowyStan = update(this.state.lista, {
+            [indexProduktu]: {
+                ilosc: {$set: nowaIlosc}
+            }
+        });
 
-        //tworzymy nową karte
-        let nowy_id = iloscKart + 1;
-        let nowy_kolor = this.pobierzKolor(nowy_status);
+        this.setState({lista: nowyStan});
+    }
 
-        let nowaKarta = {id: nowy_id, tytul: nowy_tytul, opis: nowy_opis,
-                            kolor: nowy_kolor, status: nowy_status, zadania: []};
+    odejmijProdukt(idProduktu){
+        console.log(`odejmij produkt: ${idProduktu}`);
 
 
-        //tworzymy nową kartę i dodajemy ją do kart
-        let nowyStan = update(this.state.karty, { $push: [nowaKarta] });
+        //znajdujemy indeks produktu
+        let indexProduktu = this.state.lista.findIndex((produkt) =>produkt.id === idProduktu);
 
-        //ustawiamy stan komponentu na zmieniony obiekt
-        this.setState({karty: nowyStan});
+        let nowaIlosc = this.state.lista[indexProduktu].ilosc
+        if(nowaIlosc <= 0){
+            nowaIlosc = 0
+        }else{
+            nowaIlosc = nowaIlosc - 1;
+        }
 
-        //ewentualnie wywołujemy API, aby dodać zadanie na serwer i otrzymać ostateczny identyfikator zadania
+        let nowyStan = update(this.state.lista, {
+            [indexProduktu]: {
+                ilosc: {$set: nowaIlosc}
+            }
+        });
+
+        this.setState({lista: nowyStan});
+    }
+
+    wyzerujProdukt(idProduktu){
+        console.log(`wyzeruj produkt: ${idProduktu}`);
+
+        //znajdujemy indeks produktu
+        let indexProduktu = this.state.lista.findIndex((produkt) =>produkt.id === idProduktu);
+
+        let nowyStan = update(this.state.lista, {
+            [indexProduktu]: {
+                ilosc: {$set: 0}
+            }
+        });
+
+        this.setState({lista: nowyStan});
+    }
+
+    usunProdukt(idProduktu){
+        console.log(`usun produkt: ${idProduktu}`);
+
+        //znajdujemy indeks produktu
+        let indexProduktu = this.state.lista.findIndex((produkt) =>produkt.id === idProduktu);
+
+        let nowyStan = update(this.state.lista, {
+            $splice: [[indexProduktu, 1]]
+        });
+
+        this.setState({lista: nowyStan});
+    }
+
+    dodajProdukt(nazwa, cena, idProduktu){
+        console.log(`dodaj produkt: ${nazwa}, ${cena}, ${idProduktu}`);
+
+        //znajdujemy nawiększy indeks
+        let maxIndex = 0
+        for (let i = 0; i < this.state.lista.length; i++) {
+            if(this.state.lista[i].id > maxIndex){
+                maxIndex = this.state.lista[i].id
+            }
+        }
+
+        //zwiekszamy znaleziony indeks o jeden (generowanie unikalnego indeksu)
+        maxIndex += 1
+
+        const randomColor = Math.floor(Math.random()*16777215).toString(16);
+
+        let nowaNazwa = nazwa
+        if(nazwa === ""){
+            nowaNazwa = "Brak nazwy"
+        }
+
+        //tworzymy nowy produkt
+        let nowyProdukt = {
+            id: maxIndex,
+            nazwa: nowaNazwa,
+            ilosc: 0,
+            cena: parseInt(cena),
+            kolor: "#" + randomColor
+        };
+
+        let nowyStan = update(this.state.lista, {
+            $push: [nowyProdukt]
+        });
+
+        this.setState({lista: nowyStan});
+    }
+
+    zaktualizujProdukt(nazwa, cena, idProduktu){
+        console.log(`zaktualizuj produkt: ${nazwa}, ${cena}, ${idProduktu}`);
+
+        //znajdujemy indeks produktu
+        let indexProduktu = this.state.lista.findIndex((produkt) =>produkt.id === idProduktu);
+
+        let nowaNazwa = nazwa
+        if(nazwa === ""){
+            nowaNazwa = "Brak nazwy"
+        }
+
+        let nowyStan = update(this.state.lista, {
+            [indexProduktu]: {
+                nazwa: {$set: nowaNazwa},
+                cena: {$set: parseInt(cena)}
+            }
+        });
+
+        this.setState({lista: nowyStan});
+    }
+
+    resetujProdukty() {
+        console.log(`resetuj produkty`);
+
+        this.componentDidMount()
     }
 
     render(){
-        return <TablicaKanban karty={this.state.karty}
-                              funkcjeZwrotne={
+        return <TablicaKanban lista={this.state.lista}
+                              funkcje={
                                   {
-                                      zmien: this.zmienZadanie.bind(this),
-                                      usun: this.usunZadanie.bind(this),
-                                      dodaj: this.dodajZadanie.bind(this),
-                                      dodajKarte: this.dodajKarte.bind(this)
-                                  }
-                              }
-                              funkcjePozycjiKarty={
-                                  {
-                                      lewo: this.moveLeft.bind(this),
-                                      prawo: this.moveRight.bind(this),
-                                      usun: this.usunKarte.bind(this)
+                                      zwiekszProdukt: this.zwiekszProdukt.bind(this),
+                                      odejmijProdukt: this.odejmijProdukt.bind(this),
+                                      wyzerujProdukt: this.wyzerujProdukt.bind(this),
+                                      usunProdukt: this.usunProdukt.bind(this),
+                                      dodajProdukt: this.dodajProdukt.bind(this),
+                                      zaktualizujProdukt: this.zaktualizujProdukt.bind(this),
+                                      resetujProdukty: this.resetujProdukty.bind(this)
                                   }
                               }
         />

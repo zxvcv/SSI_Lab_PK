@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import update from 'immutability-helper';
 import TablicaKanban from "./TablicaKanban";
+import {writeFile} from "fs";
+
+
 
 class TablicaKanbanKontener extends Component{
     constructor() {
@@ -136,6 +139,42 @@ class TablicaKanbanKontener extends Component{
 
     zmienZadanie(idKarty, idZadania, indexZadania){
         console.log(`zmienZadanie: ${idKarty}, idZadania: ${idZadania}, indexZadania ${indexZadania}`);
+
+        let poprzedniStan = this.state.karty;
+
+        //znajdujemy indeks kartki
+        let indexKarty = this.state.karty.findIndex((karta) => karta.id === idKarty);
+
+        //Tworzymy zmienną będącą referncją do wartośći 'zrobione' zadania
+        let nowaWartoscZrobione;
+
+        //Za pomocą polecenia $apply zmieniamy wartość zrobione na przeciwną
+        let nowyStan = update(this.state.karty, {
+            [indexKarty]: {
+                zadania: {
+                    [indexZadania]: {
+                        zrobione: {
+                            $apply: (zrobione) => {
+                                nowaWartoscZrobione = !zrobione
+                                return nowaWartoscZrobione;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        //ustawiamy stan kompunentu na zmieniony obiekt
+        this.setState({karty: nowyStan});
+
+        //ewentualnie wywołujemy API aby zaktualilzować zadanie na serwerze, np.
+        /*
+        fetch(`${API_URL}/karty/${idKarty}/zadania/${idZadania}`, {
+            method: 'put',
+            headers: API_HEADERS,
+            body: JSON.stringify({zrobione:nowaWartoscZrobione})
+        })
+        */
     }
 
     dodajKarte(nowy_tytul, nowy_opis, nowy_status){

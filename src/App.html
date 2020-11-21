@@ -1,0 +1,8 @@
+<div class="text-center p-3">
+    <div class="bg-primary text-white text-center m-2 p-3">
+        <h3>Produkt: {{ nazwa | wielka | odwroc }}</h3>
+        <h3>Produkt: {{ nazwa | odwroc | wielka }}</h3>
+        <h3>Cena: {{ pobierzCalkowitaCene(nizszyPodatek) | waluta(3) }} (niższa stawka)</h3>
+        <h3>Cena: {{ pobierzCalkowitaCene(wyzszyPodatek) | walutaG }} (wyzsza stawka)</h3>
+    </div>
+</div>

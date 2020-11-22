@@ -44,7 +44,24 @@ export default {
         22: { nazwa: "Kamizelka ratunkowa", cena: 49.99 },
         3: { nazwa: "Piłka do metalu", cena: 19.49 },
         "4": { nazwa: "Stadion", cena: 9999999 }
-      }
+      },
+
+      rozmiarStrony: 5,
+      aktualnaStrona: 1,
+      produktyPaginacja: [
+        { nazwa: "Kajak", cena: 234 },
+        { nazwa: "Kamizelka ratunkowa", cena: 49.99 },
+        { nazwa: "Piłka do metalu", cena: 19.49 },
+        { nazwa: "Stadion", cena: 9999999 },
+        { nazwa: "Czapeczka", cena: 15 },
+        { nazwa: "Krzesełko", cena: 29.49 },
+        { nazwa: "Szachownica", cena: 59 },
+        { nazwa: "Czhorągiewka", cena: 9.99 },
+        { nazwa: "Jabłuszko", cena: 2.99 },
+        { nazwa: "Gruszeczka", cena: 3.99 },
+        { nazwa: "Laptop", cena: 3500 },
+        { nazwa: "Samochód", cena: 30000 }
+      ]
     }
   },
   computed: {
@@ -83,6 +100,13 @@ export default {
     },
     zawartoscTekstowa() {
       return this.podswietlenieProp ? "Podswietlenie" : `Produkt: ${this.nazwa}`;
+    },
+    liczbaStron() {
+      return Math.ceil(this.produktyPaginacja.length / this.rozmiarStrony);
+    },
+    elementyStrony() {
+      let start = (this.aktualnaStrona - 1) * this.rozmiarStrony;
+      return this.produktyPaginacja.slice(start, start + this.rozmiarStrony);
     }
   },
   methods: {
@@ -129,6 +153,9 @@ export default {
     },
     przechwycKlikniecieLiczba(liczba) {
       console.log(`liczba: ${liczba}`);
+    },
+    wybierzStrone(strona) {
+      this.aktualnaStrona = strona;
     }
   },
   filters: {

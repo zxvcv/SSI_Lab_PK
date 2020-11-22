@@ -122,4 +122,24 @@
             {{ i }}
         </button>
     </div>
+
+    <h2 class="bg-primary text-white text-center p-3">Produkty</h2>
+    <table class="table table-sm table-bordered table-striped text-left">
+        <tr><th>Nazwa</th><th>Cena</th></tr>
+        <tbody>
+        <tr v-for="p in elementyStrony" v-bind:key="p.nazwa">
+            <td>{{ p.nazwa }}</td>
+            <td>{{ p.cena }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <!-- eslint-disable-next-line vue/require-v-for-key -->
+        <button v-for="i in liczbaStron"
+                v-on:click="wybierzStrone(i)"
+                class="btn btn-primary m-1"
+                v-bind:class="{'bg-warning': aktualnaStrona === i}">
+            {{ i }}
+        </button>
+    </div>
 </div>

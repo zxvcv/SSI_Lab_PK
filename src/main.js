@@ -24,9 +24,6 @@ app.parentElement.replaceChild(container, app);
 import Vue from "vue";
 import mojKomponent from "./App";
 
-//filtr globalny
-Vue.filter("walutaG", (wartosc) => new Intl.NumberFormat("pl-PL",
-        {style: "currency", currency: "PLN"}).format(wartosc));
 
 new Vue({
     el: "#app",

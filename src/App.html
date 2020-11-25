@@ -123,20 +123,50 @@
         </button>
     </div>
 
-    <h2 class="bg-primary text-white text-center p-3">Produkty</h2>
+
+
+
+
+
+
+    <div>
+        <h2 class="bg-primary text-white p-3">Paweł Piskorz</h2>
+        Ile różnych produktów? {{ iloscRoznychProduktow }}<br/>
+        Ile wszystkich produktów? {{ iloscWszystkichProduktow }}<br/>
+        Cena wszystkich produktów? {{ cenaWszystkichProduktow }}<br/>
+    </div>
     <table class="table table-sm table-bordered table-striped text-left">
-        <tr><th>Nazwa</th><th>Cena</th></tr>
-        <tbody>
-        <tr v-for="p in elementyStrony" v-bind:key="p.nazwa">
-            <td>{{ p.nazwa }}</td>
-            <td>{{ p.cena }}</td>
+        <tr>
+            <th v-on:click="sortuj('id')">Id</th>
+            <th v-on:click="sortuj('nazwa')">Nazwa</th>
+            <th v-on:click="sortuj('cena')">Cena</th>
+            <th v-on:click="sortuj('kolor')">Kolor</th>
+            <th v-on:click="sortuj('ilosc')">Ilość</th>
+            <th></th>
         </tr>
+        <tbody>
+            <tr v-for="(p) in elementyStrony" v-bind:key="p.id">
+                <td><span v-bind:style="ustawKolor(p.id)">{{ p.id }}</span></td>
+                <td><span v-bind:style="ustawKolor(p.id)">{{ p.nazwa }}</span></td>
+                <td><span v-bind:style="ustawKolor(p.id)">{{ p.cena }}</span></td>
+                <td><span v-bind:style="ustawKolor(p.id)">{{ p.kolor }}</span></td>
+                <td><span v-bind:style="ustawKolor(p.id)">{{ p.ilosc }}</span></td>
+                <td>
+                    <button class="btn btn-secondary m-1" v-on:click="dodajProdukt(p.id)"
+                            v-bind:style="ustawKolor(p.id)"> + </button>
+                    <button class="btn btn-secondary m-1" v-on:click="odejmijProdukt(p.id)"
+                            v-bind:style="ustawKolor(p.id)"> - </button>
+                    <button class="btn btn-secondary m-1" v-on:click="zerujProdukt(p.id)"
+                            v-bind:style="ustawKolor(p.id)"> 0 </button>
+                    <button class="btn btn-secondary m-1" v-on:click="usunProdukt(p.id)"
+                            v-bind:style="ustawKolor(p.id)"> usuń </button>
+                </td>
+            </tr>
         </tbody>
     </table>
     <div class="text-center">
-        <button class="btn btn-secondary m-1" v-on:click="zmienSortowanie"
-                v-bind:class="{'bg-primary': sortowanie}">
-            Włącz sortowanie
+        <button class="btn btn-secondary m-1" v-on:click="dodajElement">
+            Dodaj nowy randomowy produkt
         </button>
         <button class="btn btn-secondary m-1" v-on:click="zmienFiltrowanie"
                 v-bind:class="{'bg-primary': filtrowanie}">

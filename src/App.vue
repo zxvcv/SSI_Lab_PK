@@ -104,15 +104,15 @@ export default {
       return this.podswietlenieProp ? "Podswietlenie" : `Produkt: ${this.nazwa}`;
     },
     wyswietlaneElementy() {
-      let dane = this.filtrowanie ? this.produkty.filter(p => p.cena > 100) : this.produkty;
+      let dane = this.filtrowanie ? this.produktyPaginacja.filter(p => p.cena > 100) : this.produktyPaginacja;
       return this.sortowanie ? dane.concat().sort((p1, p2) => p2.cena - p1.cena): dane;
     },
     liczbaStron() {
-      return Math.ceil(this.produktyPaginacja.length / this.rozmiarStrony);
+      return Math.ceil(this.wyswietlaneElementy.length / this.rozmiarStrony);
     },
     elementyStrony() {
       let start = (this.aktualnaStrona - 1) * this.rozmiarStrony;
-      return this.produktyPaginacja.slice(start, start + this.rozmiarStrony);
+      return this.wyswietlaneElementy.slice(start, start + this.rozmiarStrony);
     }
   },
   methods: {

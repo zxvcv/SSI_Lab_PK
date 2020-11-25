@@ -134,6 +134,14 @@
         </tbody>
     </table>
     <div class="text-center">
+        <button class="btn btn-secondary m-1" v-on:click="zmienSortowanie"
+                v-bind:class="{'bg-primary': sortowanie}">
+            Włącz sortowanie
+        </button>
+        <button class="btn btn-secondary m-1" v-on:click="zmienFiltrowanie"
+                v-bind:class="{'bg-primary': filtrowanie}">
+            Włącz filtrowanie
+        </button>
         <!-- eslint-disable-next-line vue/require-v-for-key -->
         <button v-for="i in liczbaStron"
                 v-on:click="wybierzStrone(i)"

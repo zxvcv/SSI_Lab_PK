@@ -48,6 +48,8 @@ export default {
 
       rozmiarStrony: 5,
       aktualnaStrona: 1,
+      filtrowanie: false,
+      sortowanie: false,
       produktyPaginacja: [
         { nazwa: "Kajak", cena: 234 },
         { nazwa: "Kamizelka ratunkowa", cena: 49.99 },
@@ -100,6 +102,10 @@ export default {
     },
     zawartoscTekstowa() {
       return this.podswietlenieProp ? "Podswietlenie" : `Produkt: ${this.nazwa}`;
+    },
+    wyswietlaneElementy() {
+      let dane = this.filtrowanie ? this.produkty.filter(p => p.cena > 100) : this.produkty;
+      return this.sortowanie ? dane.concat().sort((p1, p2) => p2.cena - p1.cena): dane;
     },
     liczbaStron() {
       return Math.ceil(this.produktyPaginacja.length / this.rozmiarStrony);
@@ -156,6 +162,14 @@ export default {
     },
     wybierzStrone(strona) {
       this.aktualnaStrona = strona;
+    },
+    zmienSortowanie() {
+      this.sortowanie = !this.sortowanie;
+      this.aktualnaStrona = 1;
+    },
+    zmienFiltrowanie() {
+      this.filtrowanie = !this.filtrowanie;
+      this.aktualnaStrona = 1;
     }
   },
   filters: {

@@ -1,15 +1,2 @@
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-  <header class="mdl-layout__header">
-    <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">Notowania</span>
-      <div class="mdl-layout-spacer"></div>
-      <nav class="mdl-navigation mdl-layout__large-screen-only">
-        <a class="mdl-navigation__link" [routerLink]="['/']">Panel</a>
-        <a class="mdl-navigation__link" [routerLink]="['/manage']">Zarządzaj</a>
-      </nav>
-    </div>
-  </header>
-  <main class="mdl-layout__content" style="padding: 20px;">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+<app-navbar></app-navbar>
+<app-dashboard></app-dashboard>

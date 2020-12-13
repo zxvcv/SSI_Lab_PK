@@ -1,33 +1,29 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
-import { HttpClientModule } from '@angular/common/http';
-import { StocksService } from './services/stocks.service';
 import { AppComponent } from './app.component';
-import { SummaryComponent } from './components/summary/summary.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ManageComponent } from './components/manage/manage.component';
-import { FormsModule } from '@angular/forms';
-import { AppRoutes } from './app.routes';
+import { NavbarComponent } from './navbar/navbar.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { MetricComponent } from './metric/metric.component';
+import { NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
+import { NodesComponent } from './nodes/nodes.component';
+import { NodesRowComponent } from './nodes-row/nodes-row.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SummaryComponent,
+    NavbarComponent,
     DashboardComponent,
-    ManageComponent
+    MetricComponent,
+    NodesComponent,
+    NodesRowComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    AppRoutes
+    NgbProgressbarModule
   ],
-  providers: [
-    StocksService
-  ],
-  bootstrap: [
-    AppComponent
-  ]
+  providers: [],
+  bootstrap: [AppComponent],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

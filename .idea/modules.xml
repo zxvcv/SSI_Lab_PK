@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ssi_react.iml" filepath="$PROJECT_DIR$/ssi_react.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ssiLab.iml" filepath="$PROJECT_DIR$/ssiLab.iml" />
     </modules>
   </component>
 </project>

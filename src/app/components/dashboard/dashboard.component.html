@@ -1,8 +1,86 @@
-<div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--12-col" *ngIf="!stocks" style="text-align: center;">
-    <h1>Ładowanie...</h1>
-  </div>
-  <div class="mdl-cell mdl-cell--3-col" *ngFor="let stock of stocks">
-    <app-summary [stock]="stock"></app-summary>
-  </div>
+<div class="mdl-grid" *ngIf="editMode == 0">
+  <table class="mdl-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width: 100%">
+    <tbody>
+    <tr *ngFor="let student of students;let i = index" (click)="setFocus(i)">
+      <td class="mdl-data-table__cell--non-numeric">{{student.imie}} {{student.nazwisko}}</td>
+      <td class="mdl-data-table__cell--non-numeric">{{student.nrIndeksu}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="mdl-grid" *ngIf="editMode == 0 && focused >= 0">
+  <table class="mdl-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width: 100%">
+    <tbody>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">
+        Informacje owybranym studencie:
+      </td>
+    </tr>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">nr indeksu:</td>
+      <td class="mdl-data-table__cell--non-numeric">{{students[focused].nrIndeksu}}</td>
+    </tr>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">imię:</td>
+      <td class="mdl-data-table__cell--non-numeric">{{students[focused].imie}}</td>
+    </tr>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">nazwisko:</td>
+      <td class="mdl-data-table__cell--non-numeric">{{students[focused].nazwisko}}</td>
+    </tr>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">średnia:</td>
+      <td class="mdl-data-table__cell--non-numeric">{{getSrednia()}}</td>
+    </tr>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">
+        Oceny:
+      </td>
+    </tr>
+    <tr *ngFor="let przedmiot of students[focused].oceny">
+      <td class="mdl-data-table__cell--non-numeric">{{przedmiot.przedmiot}}</td>
+      <td class="mdl-data-table__cell--non-numeric">{{getOcena(przedmiot.wartosc)}}</td>
+    </tr>
+    <tr><input name="edit" type="button" value="Edytuj" (click)="goEditMode()"/></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="mdl-grid" *ngIf="editMode == 1">
+  <table class="mdl-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width: 100%">
+    <tbody>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">
+        Edycja studenta o nr indeksu {{students[focused].nrIndeksu}}:
+      </td>
+    </tr>
+    <tr>
+      <td>Imię:</td>
+      <td>
+        <input name="input1" [(ngModel)]="students[focused].imie" class="mdl-textfield__input"
+                 type="text" placeholder="Imię"/>
+      </td>
+    </tr>
+    <tr>
+      <td>Nazwisko:</td>
+      <td>
+        <input name="input1" [(ngModel)]="students[focused].nazwisko" class="mdl-textfield__input"
+               type="text" placeholder="Nazwisko"/>
+      </td>
+    </tr>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">
+        Oceny:
+      </td>
+    </tr>
+    <tr *ngFor="let subject of students[focused].oceny">
+      <td>{{subject.przedmiot}}</td>
+      <td>
+        <input name="input1" [(ngModel)]="subject.wartosc" class="mdl-textfield__input"
+               type="number" placeholder="brak oceny" />
+      </td>
+    </tr>
+    <tr><input name="edit" type="button" value="Edytuj" (click)="saveEdited()"/></tr>
+    </tbody>
+  </table>
 </div>

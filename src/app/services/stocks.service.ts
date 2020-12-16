@@ -1,39 +1,50 @@
-//ng generate service services/stocks
+// ng generate service services/stocks
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Student } from '../student';
+import { STUDENCI } from '../studenci-db';
 
-const stocks: Array<string> = ['IBM', 'GOOG', 'FB', 'AMZN'];
-const service = 'https://angular2-in-action-api.herokuapp.com';
-
-export interface StockInterface {
-  symbol: string;
-  lastTradePriceOnly: number;
-  change: number;
-  changeInPercent: number;
-}
+const students: Array<Student> = STUDENCI;
 
 @Injectable()
 
 export class StocksService {
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   get() {
-    return stocks.slice();
+    return students.slice();
   }
 
-  add(stock) {
-    stocks.push(stock);
+  update(index, data) {
+    students[index] = data;
+  }
+
+  add(item) {
+    students.push(item);
     return this.get();
   }
 
-  remove(stock) {
-    stocks.splice(stocks.indexOf(stock), 1);
+  remove(index) {
+    students.splice(index, 1);
     return this.get();
   }
 
-  load(symbols) {
-    if(symbols){
-      return this.http.get<Array<StockInterface>>(service + '/stocks/snapshot?symbols=' + symbols.join());
+  get_subjects() {
+    const subjects = [];
+    for (let i = 0; i < students[0].oceny.length; ++i)
+    {
+      subjects.push(students[0].oceny[i].przedmiot);
     }
+    return subjects;
+  }
+
+  add_subject(subject) {
+    for (let i = 0; i < students.length; ++i)
+    {
+      students[i].oceny.push({
+        przedmiot: subject,
+        wartosc: null
+      });
+    }
+    return this.get_subjects();
   }
 }

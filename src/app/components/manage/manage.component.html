@@ -1,19 +1,39 @@
 <div class="mdl-grid">
   <div class="mdl-cell mdl-cell--4 col"></div>
   <div class="mdl-cell mdl-cell--4 col">
-    <form style="margin-bottom: 5px;" (submit)="add()">
-      <input name="stock" [(ngModel)]="stock" class="mdl-textfield__input"
-             type="text" placeholder="Proszę podać nazwę spółki"/>
-    </form>
     <table class="mdl-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width: 100%">
       <tbody>
-        <tr *ngFor="let symbol of symbols">
-          <td class="mdl-data-table__cell--non-numeric">{{symbol}}</td>
-          <td style="padding-top: 5px;">
-            <button class="mdl-button" (click)="remove(symbol)">Usuń</button>
-          </td>
+        <tr *ngFor="let student of students">
+          <td class="mdl-data-table__cell--non-numeric">nr</td>
+          <td class="mdl-data-table__cell--non-numeric">{{student.imie}} {{student.nazwisko}}</td>
         </tr>
       </tbody>
     </table>
+    <form style="margin-bottom: 5px;" (submit)="add()">
+      <input name="stock1" [(ngModel)]="tempName" class="mdl-textfield__input"
+             type="text" placeholder="Imię"/>
+      <input name="stock2" [(ngModel)]="tempSurname" class="mdl-textfield__input"
+             type="text" placeholder="Nazwisko"/>
+      <input name="stock3" [(ngModel)]="tempIndex" type="number" placeholder="Ocena"/>
+      <input name="stock4" type="submit" placeholder="Dodaj"/>
+    </form>
+  </div>
+</div>
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--4 col"></div>
+  <div class="mdl-cell mdl-cell--4 col">
+    <table class="mdl-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width: 100%">
+      <tbody>
+      <tr *ngFor="let subject of subjects">
+        <td class="mdl-data-table__cell--non-numeric">nr</td>
+        <td class="mdl-data-table__cell--non-numeric">{{subject}}</td>
+      </tr>
+      </tbody>
+    </table>
+    <form style="margin-bottom: 5px;" (submit)="dodaj_przedmiot()">
+      <input name="stock5" [(ngModel)]="tempSubject" class="mdl-textfield__input"
+             type="text" placeholder="Przedmiot"/>
+      <input name="stock6" type="submit" placeholder="Dodaj"/>
+    </form>
   </div>
 </div>
